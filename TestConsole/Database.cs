@@ -8,28 +8,27 @@ using Microsoft.Extensions.Logging;
 
 namespace EfCoreTest
 {
-    public class DbContext : Microsoft.EntityFrameworkCore.DbContext
+    public class DatabaseContext : Microsoft.EntityFrameworkCore.DbContext
     {
-        public DbSet<Dish> Dishes { get; set; }
-        public DbSet<DishIngredient> DishIngredients {get; set; }
+        // public DbSet<Dish> Dishes { get; set; }
 
-        public DbContext(DbContextOptions<DbContext> options) : base (options) { }
+        public DatabaseContext(DbContextOptions<DatabaseContext> options) : base (options) { }
     }
 
-    public class DbContextFactory : IDesignTimeDbContextFactory<DbContext>
+    public class DbContextFactory : IDesignTimeDbContextFactory<DatabaseContext>
     {
-        public DbContext CreateDbContext(string[]? args = null)
+        public DatabaseContext CreateDbContext(string[]? args = null)
         {
             var configuration = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
 
-            var optionsBuilder = new DbContextOptionsBuilder<DbContext>();
+            var optionsBuilder = new DbContextOptionsBuilder<DatabaseContext>();
             optionsBuilder
                 // Uncomment the following line if you want to print generated
                 // SQL statements on the console.
                 .UseLoggerFactory(LoggerFactory.Create(builder => builder.AddConsole()))
                 .UseSqlServer(configuration["ConnectionStrings:DefaultConnection"]);
 
-            return new DbContext(optionsBuilder.Options);
+            return new DatabaseContext(optionsBuilder.Options);
         }
     }
 }
